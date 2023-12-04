@@ -2,51 +2,73 @@ package com.deus.board;
 
 import com.deus.key.Key;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SquareBoard extends Board{
 
-    private int size;
+    int size;
 
     public SquareBoard(int size) {
         super(size, size);
+        this.size = size;
     }
 
     @Override
-    void fillBoard(List<Integer> list) {
+    public void fillBoard(List<Integer> list) {
+        int indexOfList = 0;
+        for (int i = 0; i < this.size; i++) {
+            for (int j = 0; j < this.size; j++) {
+                Key key = new Key(i, j);
+                Integer value = list.get(indexOfList);
+                indexOfList++;
+                board.put(key, value);
+            }
+        }
     }
 
     @Override
-    List<Key> availableSpace() {
+    public List<Key> availableSpace() {
+        List<Key> keysWithNullValues = new ArrayList<>();
+        for (int i = 0; i < this.size; i++) {
+            for (int j = 0; j < this.size; j++) {
+                Key key = getKey(i, j);
+                Integer value = board.get(key);
+                if (value == null) {
+                    keysWithNullValues.add(getKey(i, j));
+                }
+            }
+        }
+        return keysWithNullValues;
+    }
+
+    @Override
+    public void addItem(Key key, Integer value) {
+        board.put(key, value);
+    }
+
+    @Override
+    public Key getKey(int i, int j) {
+        return new Key(i, j);
+    }
+
+    @Override
+    public List<Key> getRow(int i) {
         return null;
     }
 
     @Override
-    void addItem(Key key, Integer value) {
-    }
-
-    @Override
-    Key getKey(int i, int j) {
+    public List<Key> getColumn(int j) {
         return null;
     }
 
     @Override
-    List<Key> getRow(int i) {
-        return null;
-    }
-
-    @Override
-    List<Key> getColumn(int j) {
-        return null;
-    }
-
-    @Override
-    boolean hasValue(Integer value) {
+    public boolean hasValue(Integer value) {
         return false;
     }
 
     @Override
-    List<Integer> getValues(List<Key> keys) {
+    public List<Integer> getValues(List<Key> keys) {
         return null;
     }
 }
