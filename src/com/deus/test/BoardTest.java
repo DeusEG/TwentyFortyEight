@@ -13,7 +13,7 @@ public class BoardTest {
         board.fillBoard(asList(1,2,3,null));
         if (board.availableSpace().get(0) != board.getKey(1,1)) throw new RuntimeException("availableSpace not work =(");
         if (!board.getKey(0,0).equals(board.getKey(0, 0))) throw new RuntimeException("Keys must be same");
-//        if (board.getKey(2,2) != null) throw new RuntimeException("Not found key must be null");
+        if (board.getKey(2,2) != null) throw new RuntimeException("Not found key must be null");
 //        if (board.getValue(board.getKey(1, 1)) != null) throw new RuntimeException("getValue not work =(");
 //        if (!board.hasValue(null) || !board.hasValue(3)) throw new RuntimeException("hasValue not work =(");
 //        assertEquals(board.getColumn(0), asList(board.getKey(0,0), board.getKey(1,0)));

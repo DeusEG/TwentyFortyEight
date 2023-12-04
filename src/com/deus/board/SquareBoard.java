@@ -4,6 +4,7 @@ import com.deus.key.Key;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SquareBoard extends Board{
 
@@ -49,7 +50,13 @@ public class SquareBoard extends Board{
 
     @Override
     public Key getKey(int i, int j) {
-        return new Key(i, j);
+        for (Map.Entry<Key, Integer> entry : board.entrySet()) {
+            Key key = new Key(i, j);
+            if (entry.getKey().equals(key)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     @Override
