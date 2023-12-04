@@ -60,22 +60,52 @@ public class SquareBoard extends Board{
     }
 
     @Override
+    public Integer getValue(Key key) {
+        return board.get(key);
+    }
+
+    @Override
     public List<Key> getRow(int i) {
-        return null;
+        List<Key> rowOfKeys = new ArrayList<>();
+        for (Map.Entry<Key, Integer> entry : board.entrySet()) {
+            if (entry.getKey().getI() == i) {
+                rowOfKeys.add(entry.getKey());
+            }
+        }
+        return rowOfKeys;
     }
 
     @Override
     public List<Key> getColumn(int j) {
-        return null;
+        List<Key> rowOfKeys = new ArrayList<>();
+        for (Map.Entry<Key, Integer> entry : board.entrySet()) {
+            if (entry.getKey().getJ() == j) {
+                rowOfKeys.add(entry.getKey());
+            }
+        }
+        return rowOfKeys;
     }
 
     @Override
     public boolean hasValue(Integer value) {
+        for (Map.Entry<Key, Integer> entry : board.entrySet()) {
+            if (entry.getValue() == value) {
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public List<Integer> getValues(List<Key> keys) {
-        return null;
+        List<Integer> valuesList = new ArrayList<>();
+        for (Key key: keys) {
+            for (Map.Entry<Key, Integer> entry : board.entrySet()) {
+                if (entry.getKey() == key) {
+                    valuesList.add(entry.getValue());
+                }
+            }
+        }
+        return valuesList;
     }
 }
