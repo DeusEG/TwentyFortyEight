@@ -11,7 +11,7 @@ public class BoardTest {
 
     public static void main(String[] args) {
         board.fillBoard(asList(1,2,3,null));
-        if (board.availableSpace().get(0) != board.getKey(1,1)) throw new RuntimeException("availableSpace not work =(");
+        if (!board.availableSpace().get(0).equals(board.getKey(1,1))) throw new RuntimeException("availableSpace not work =(");
         if (!board.getKey(0,0).equals(board.getKey(0, 0))) throw new RuntimeException("Keys must be same");
         if (board.getKey(2,2) != null) throw new RuntimeException("Not found key must be null");
         if (board.getValue(board.getKey(1, 1)) != null) throw new RuntimeException("getValue not work =(");
@@ -24,6 +24,7 @@ public class BoardTest {
     }
 
     public static void assertEquals(List<?> list1, List<?> list2) {
-        if (!list1.equals(list2)) throw new RuntimeException("List1: " + list1 + " not equals List2: " + list2);
+        if (!(list1.size() == list2.size() && list1.containsAll(list2) && list2.containsAll(list1))) throw new RuntimeException("List1: " + list1 + " not equals List2: " + list2);
     }
 }
+

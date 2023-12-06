@@ -16,6 +16,14 @@ public abstract class Board {
         this.height = height;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public abstract void fillBoard(List<Integer> list);
     public abstract List<Key> availableSpace();
     public abstract void addItem(Key key, Integer value);
@@ -25,4 +33,5 @@ public abstract class Board {
     public abstract List<Key> getColumn(int j);
     public abstract boolean hasValue(Integer value);
     public abstract List<Integer> getValues(List<Key> keys);
+
 }

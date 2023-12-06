@@ -2,6 +2,7 @@ package com.deus.key;
 
 import java.util.Objects;
 
+
 public class Key {
 
     private int i;
@@ -39,5 +40,13 @@ public class Key {
     @Override
     public int hashCode() {
         return Objects.hash(getI(), getJ());
+    }
+
+    @Override
+    public String toString() {
+        return "Key{" +
+                "i=" + i +
+                ", j=" + j +
+                '}';
     }
 }
