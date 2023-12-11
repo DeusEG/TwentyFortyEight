@@ -63,7 +63,11 @@ public class Game2048 implements Game{
                             board.addItem(board.getKey(i, j), rowLeft.get(j));
                         }
                     }
-
+                    try {
+                        addItem();
+                    } catch (NotEnoughSpaceException e) {
+                        return false;
+                    }
                     break;
                 case RIGHT:
                     for (int i = 0; i < board.getHeight(); i++) {
@@ -75,7 +79,11 @@ public class Game2048 implements Game{
                             board.addItem(board.getKey(i, rowRightSize - 1 - j), rowRight.get(j));
                         }
                     }
-
+                    try {
+                        addItem();
+                    } catch (NotEnoughSpaceException e) {
+                        return false;
+                    }
                     break;
                 case UP:
                     for (int j = 0; j < board.getWidth(); j++) {
@@ -84,7 +92,11 @@ public class Game2048 implements Game{
                             board.addItem(board.getKey(i, j), colForward.get(i));
                         }
                     }
-
+                    try {
+                        addItem();
+                    } catch (NotEnoughSpaceException e) {
+                        return false;
+                    }
                     break;
                 case DOWN:
                     for (int j = 0; j < board.getWidth(); j++) {
@@ -96,13 +108,12 @@ public class Game2048 implements Game{
                             board.addItem(board.getKey(colBackSize - 1 - i, j), colBack.get(i));
                         }
                     }
-
+                    try {
+                        addItem();
+                    } catch (NotEnoughSpaceException e) {
+                        return false;
+                    }
                     break;
-            }
-            try {
-                addItem();
-            } catch (NotEnoughSpaceException e) {
-                return false;
             }
             return true;
         } else {
