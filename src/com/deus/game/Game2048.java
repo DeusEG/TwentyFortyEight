@@ -1,80 +1,126 @@
 package com.deus.game;
 
 import com.deus.board.Board;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import com.deus.board.SquareBoard;
+
+import java.util.*;
+
 import com.deus.direction.Direction;
+import com.deus.exception.NotEnoughSpaceException;
 import com.deus.key.Key;
 
 public class Game2048 implements Game{
 
+    public static final int GAME_SIZE = 4;
+    private final Board<Key, Integer> board = new SquareBoard<>(GAME_SIZE);
     GameHelper helper = new GameHelper();
-    Board board;
     Random random = new Random();
 
-    public Game2048(Board board) {
-        this.board = board;
+
+    public Game2048() {
     }
 
     @Override
     public void init() {
-        List<Integer> list = new ArrayList<>(Arrays.asList(2, 2, 4, 4));
-        board.fillBoard(list);
+        board.fillBoard(Collections.nCopies(GAME_SIZE * GAME_SIZE, null));
+        for (int i = 0; i < 2; i++) {
+            try {
+                addItem();
+            } catch (NotEnoughSpaceException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     @Override
     public boolean canMove() {
-        return !board.availableSpace().isEmpty();
+        if (!board.availableSpace().isEmpty()) {
+            return true;
+        }
+        for (int i = 0; i < board.getHeight(); i++) {
+            var rowCurrent = board.getValues(board.getRow(i));
+            if (!rowCurrent.equals(helper.moveAndMergeEqual(rowCurrent))) {
+                return true;
+            }
+        }
+        for (int j = 0; j < board.getWidth(); j++) {
+            var column = board.getValues(board.getColumn(j));
+            if (!column.equals(helper.moveAndMergeEqual(column))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public boolean move(Direction direction) {
         if (canMove()) {
             switch (direction) {
-                case LEFT: {
+                case LEFT:
                     for (int i = 0; i < board.getHeight(); i++) {
-                        helper.moveAndMergeEqual(board.getValues(board.getRow(i)));
+                        List<Integer> rowLeft = helper.moveAndMergeEqual(board.getValues(board.getRow(i)));
+                        for (int j = 0; j < rowLeft.size(); j++) {
+                            board.addItem(board.getKey(i, j), rowLeft.get(j));
+                        }
                     }
-                    addItem();
+
                     break;
-                }
-                case RIGHT: {
-                    for (int i = board.getHeight() - 1; i >= 0 ; i--) {
-                        helper.moveAndMergeEqual(board.getValues(board.getRow(i)));
+                case RIGHT:
+                    for (int i = 0; i < board.getHeight(); i++) {
+                        List<Integer> inputList = board.getValues(board.getRow(i));
+                        Collections.reverse(inputList);
+                        List<Integer> rowRight = helper.moveAndMergeEqual(inputList);
+                        int rowRightSize = rowRight.size();
+                        for (int j = 0; j < rowRightSize; j++) {
+                            board.addItem(board.getKey(i, rowRightSize - 1 - j), rowRight.get(j));
+                        }
                     }
-                    addItem();
+
                     break;
-                }
-                case UP: {
-                    for (int j = board.getWidth() - 1; j >= 0 ; j--) {
-                        helper.moveAndMergeEqual(board.getValues(board.getColumn(j)));
-                    }
-                    addItem();
-                    break;
-                }
-                case DOWN: {
+                case UP:
                     for (int j = 0; j < board.getWidth(); j++) {
-                        helper.moveAndMergeEqual(board.getValues(board.getColumn(j)));
+                        List<Integer> colForward = helper.moveAndMergeEqual(board.getValues(board.getColumn(j)));
+                        for (int i = 0; i < colForward.size(); i++) {
+                            board.addItem(board.getKey(i, j), colForward.get(i));
+                        }
                     }
-                    addItem();
+
                     break;
-                }
+                case DOWN:
+                    for (int j = 0; j < board.getWidth(); j++) {
+                        List<Integer> inputList = board.getValues(board.getColumn(j));
+                        Collections.reverse(inputList);
+                        List<Integer> colBack = helper.moveAndMergeEqual(inputList);
+                        int colBackSize = colBack.size();
+                        for (int i = 0; i < colBackSize; i++) {
+                            board.addItem(board.getKey(colBackSize - 1 - i, j), colBack.get(i));
+                        }
+                    }
+
+                    break;
+            }
+            try {
+                addItem();
+            } catch (NotEnoughSpaceException e) {
+                return false;
             }
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     @Override
-    public void addItem() {
+    public void addItem() throws NotEnoughSpaceException {
         List<Key> spaces = board.availableSpace();
-        if (!spaces.isEmpty()) {
-            Integer[] randomNumbers = new Integer[]{2, 4, 8};
-            Integer randomNumber = random.nextInt(randomNumbers.length);
-            Key randomKey = spaces.get(random.nextInt(spaces.size()));
+        if (!spaces.isEmpty() && canMove()) {
+            Integer[] randomNumbers = new Integer[]{2, 4};
+            var randomSuit = new Random().nextInt(randomNumbers.length);
+            var randomNumber = randomNumbers[randomSuit];
+            var randomKey = spaces.get(random.nextInt(spaces.size()));
             board.addItem(randomKey, randomNumber);
+        } else {
+            throw new NotEnoughSpaceException("NotEnoughSpace");
         }
     }
 
