@@ -13,6 +13,7 @@ public class Game2048 implements Game{
 
     public static final int GAME_SIZE = 4;
     private final Board<Key, Integer> board = new SquareBoard<>(GAME_SIZE);
+    private static final String NOT_ENOUGH_SPACE_MESSAGE = "Not enough space";
     GameHelper helper = new GameHelper();
     Random random = new Random();
 
@@ -131,7 +132,7 @@ public class Game2048 implements Game{
             var randomKey = spaces.get(random.nextInt(spaces.size()));
             board.addItem(randomKey, randomNumber);
         } else {
-            throw new NotEnoughSpaceException("NotEnoughSpace");
+            throw new NotEnoughSpaceException(NOT_ENOUGH_SPACE_MESSAGE);
         }
     }
 

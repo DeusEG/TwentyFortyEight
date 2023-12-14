@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SquareBoard<V> extends Board<Key, V> {
-
-    private int size;
+    private static final String SMALL_BOARD_SIZE_MESSAGE = "Board size is smaller than incoming list";
+    private final int size;
 
     public SquareBoard(int size) {
         super(size, size);
@@ -18,7 +18,7 @@ public class SquareBoard<V> extends Board<Key, V> {
     @Override
     public void fillBoard(List<V> list) {
         if (list.size() > getWidth() * getHeight()){
-            throw new RuntimeException(String.format("Board size is smaller than incoming list"));
+            throw new RuntimeException(SMALL_BOARD_SIZE_MESSAGE);
         }
         board.clear();
         int indexOfList = 0;

@@ -2,12 +2,9 @@ package com.deus.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GameHelper {
-
-
-    private List<Integer> list;
-    private Integer size;
 
     public List<Integer> moveAndMergeEqual(List<Integer> list) {
        int size = list.size();
@@ -21,7 +18,7 @@ public class GameHelper {
        currentList = delNullElement(list, size);
 
        for (int i = 0; i < currentList.size() - 1; i++) {
-           if (currentList.get(i) != null && currentList.get(i) == currentList.get(i + 1)) {
+           if (currentList.get(i) != null && Objects.equals(currentList.get(i), currentList.get(i + 1))) {
                currentList.set(i, currentList.get(i) * 2);
                currentList.remove(i + 1);
                currentList.add(null);
